@@ -2,7 +2,7 @@ import "./Header.scss"
 
 const index = () => {
   return (
-    <header>
+    <header style={{backgroundColor:'#ffff'}}>
       {/*<!-- contact content -->*/}
       <div className="header-content-top" >
         <div className="content">
