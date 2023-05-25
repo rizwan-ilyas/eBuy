@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -142,3 +144,13 @@ STATICFILES_DIRS = [
 
 # to allow are origins to allow
 CORS_ORIGIN_ALLOW_ALL = True
+
+# adding the custom defined user as an authentication user
+AUTH_USER_MODEL = 'eBuy.User'
+
+
+#configuring custom authentication using email and password
+AUTHENTICATION_BACKENDS = [
+    'eBuy.CustomImplementations.EmailBackend',
+]
+
