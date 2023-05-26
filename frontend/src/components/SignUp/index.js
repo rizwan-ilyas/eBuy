@@ -42,7 +42,6 @@ const csrftoken=getCookie('csrftoken')
             e.target.checked===true ? e.target.value='True':e.target.value='False'       
         }
 
-
         setFormData({...formData,[e.target.name]:e.target.value})
     }
 

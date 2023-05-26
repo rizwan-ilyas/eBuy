@@ -3,11 +3,14 @@ from django.middleware import csrf
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate,logout,login
 from  django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+
 
 import json
 # Create your views here.
 
-from .models import User
+from .models import User, Customer, Seller
 
 def index(request):
     print("The is Status is : ",request.user.is_authenticated)
@@ -51,6 +54,60 @@ def signUp(request):
             return HttpResponse("Something went wrong while SignUp.!")
 
     return render(request, 'index.html')
+
+def addCustomer(request):
+    if request.user.is_authenticated:
+        userObj=request.user
+        print(userObj.id)
+        if request.method=="POST" and request.FILES.get('imagefile'):
+            try:
+                data=request.POST.dict()
+                uploadedfile=request.FILES['imagefile']
+                storage=FileSystemStorage(location= 'frontend/build/static/media/profiles/')
+                filename=storage.save(str(userObj.id)+"."+uploadedfile.name.split('.')[1],uploadedfile)
+                data['picture']=filename
+                customer=Customer.from_json(userObj, data)
+                customer.save()
+
+                return HttpResponse("File recieved")
+            except Exception as e:
+                print(e)
+                return HttpResponse("Something went wrong while saving file")
+        else:
+            return render(request,'index.html')
+        # user=request.user
+        # data=json.loads(request.body)
+        # try:
+        #     customer=Customer()
+        #     customer.from_json(user,data)
+        #     print(customer)
+        #     customer.save()
+        # except Exception as e:
+        #     print(e)
+        #     return HttpResponse("Something went Wrong while adding Customer")
+
+    else:
+        return redirect('signin')
+
+def addSeller(request):
+    if request.user.is_authenticated:
+        pass
+
+    else:
+        return redirect('signin')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def signOut(request):
     logout(request)

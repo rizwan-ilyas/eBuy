@@ -4,8 +4,13 @@ from eBuy import views
 
 
 urlpatterns = [
-    path ('',views.index,name="home page"),
-    path ('signin',views.signIn,name="SignIn/Login page"),
-    path ('signup',views.signUp,name="SignUp page"),
-    path ('signout',views.signOut,name="Logout url"),
+    path('',views.index,name="home page"),
+    path('signin',views.signIn,name="SignIn/Login page"),
+    path('signup',views.signUp,name="SignUp page"),
+    path('signout',views.signOut,name="Logout url"),
+
+    path('addcustomer',views.addCustomer,name="add Customer data"),
+    path('addseller',views.addSeller,name="add Seller data")
+
+
 ]

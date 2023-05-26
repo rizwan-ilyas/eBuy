@@ -3,7 +3,7 @@ from csv import unix_dialect
 from django.contrib.auth import password_validation
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, User
-
+import json
 
 # Create your models here.
 
@@ -37,6 +37,8 @@ class CustomUserManager(UserManager):
 
 
 
+
+# users table
 class User(AbstractBaseUser,PermissionsMixin):
     name=models.CharField(max_length=100,blank=True)
     email=models.EmailField(max_length=254,unique=True,blank=False)
@@ -64,9 +66,29 @@ class User(AbstractBaseUser,PermissionsMixin):
 
 
 
+# sellers table
+class Seller(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    phone=models.CharField(max_length=20,blank=False)
+    address=models.CharField(max_length=200,blank=False)
+    balance=models.DecimalField(max_digits=9,decimal_places=2,default=0)
+    level=models.IntegerField(default=0)
+    picture = models.CharField(max_length=50, blank=True)
 
+class Customer(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    phone=models.CharField(max_length=20,blank=False)
+    address=models.CharField(max_length=200,blank=False)
+    picture=models.CharField(max_length=50,blank=True)
 
-
+    @classmethod
+    def from_json(cls,user_object,json_object):
+        return cls.objects.create(
+            user=user_object,
+            phone=json_object.get('phone'),
+            address=json_object.get('address'),
+            picture=json_object.get('picture')
+        )
 
 
 
