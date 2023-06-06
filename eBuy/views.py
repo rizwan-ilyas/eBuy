@@ -1,3 +1,4 @@
+from django.contrib.gis.geometry import json_regex
 from django.shortcuts import render,HttpResponse, redirect
 from django.middleware import csrf
 from django.views.decorators.csrf import csrf_exempt
@@ -10,10 +11,12 @@ from django.conf import settings
 import json
 # Create your views here.
 
-from .models import User, Customer, Seller
+from .models import *
+from .mySerializers import ItemSerializer
+
 
 def index(request):
-    print("The is Status is : ",request.user.is_authenticated)
+    print("The is Auth Status is : ",request.user.is_authenticated)
     return render(request, 'index.html')
 
 def signIn(request):
@@ -28,13 +31,11 @@ def signIn(request):
             if user is not None:
                 login(request,user)
                 print("Logged in")
-                d={'message': 'Login successful'}
-                return JsonResponse(d)
+                return redirect('/')
             else:
                 return JsonResponse({'message': 'Login unsuccessful'})
         except Exception as e:
             print(e)
-
 
     return render(request, 'index.html')
 
@@ -43,13 +44,11 @@ def signUp(request):
     if request.method == "POST":
         try:
             data=json.loads(request.body)
-            print(data)
             user=User.objects.create_user(**data)
             user.save()
-            return redirect(index)
+            return redirect('/signin')
 
         except Exception as e:
-
             print(e)
             return HttpResponse("Something went wrong while SignUp.!")
 
@@ -75,30 +74,58 @@ def addCustomer(request):
                 return HttpResponse("Something went wrong while saving file")
         else:
             return render(request,'index.html')
-        # user=request.user
-        # data=json.loads(request.body)
-        # try:
-        #     customer=Customer()
-        #     customer.from_json(user,data)
-        #     print(customer)
-        #     customer.save()
-        # except Exception as e:
-        #     print(e)
-        #     return HttpResponse("Something went Wrong while adding Customer")
 
     else:
         return redirect('signin')
 
 def addSeller(request):
     if request.user.is_authenticated:
-        pass
+        userObj = request.user
+        print(userObj.id)
+        if request.method == "POST" and request.FILES.get('imagefile'):
+            try:
+                data = request.POST.dict()
+                uploadedfile = request.FILES['imagefile']
+                storage = FileSystemStorage(location='media/profiles/')
+                filename = storage.save(str(userObj.id) + "." + uploadedfile.name.split('.')[1], uploadedfile)
+                data['picture'] = filename
+                seller = Seller.from_json(userObj, data)
+                seller.save()
+                return HttpResponse("File recieved")
+            except Exception as e:
+                print(e)
+                return HttpResponse("Something went wrong while saving file")
+        else:
+            return render(request, 'index.html')
 
     else:
         return redirect('signin')
 
+def addProduct(request):
+    if request.user.is_authenticated:
+        if request.method=="POST" and request.FILES.get('imagefile'):
+            try:
+                data = request.POST.dict()
+                uploadedfile = request.FILES['imagefile']
+                storage = FileSystemStorage(location='media/products/')
+                getID=Item.objects.order_by('-id').first().id
+                filename = storage.save(str(getID+1) + "." + uploadedfile.name.split('.')[1], uploadedfile)
+                data['images'] = filename
+                item = Item.from_json(request.user, data)
+                item.save()
+                return HttpResponse("Product Added Successfully")
+            except Exception as e:
+                print(e)
+                return HttpResponse("Something went wrong while adding product")
+        else:
+            return render(request,'index.html')
+    else:
+        return redirect('/signin')
 
-
-
+def getItems(request):
+    items=Item.objects.all()
+    serializer=ItemSerializer(items, many=True)
+    return JsonResponse(serializer.data,safe=False)
 
 
 
@@ -111,7 +138,7 @@ def addSeller(request):
 
 def signOut(request):
     logout(request)
-    return render(request, 'index.html')
+    return redirect('/signin')
 
 
 

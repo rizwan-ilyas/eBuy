@@ -1,9 +1,8 @@
-from csv import unix_dialect
-
 from django.contrib.auth import password_validation
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, User
-import json
+from django.db.models import F
+
 
 # Create your models here.
 
@@ -74,6 +73,18 @@ class Seller(models.Model):
     balance=models.DecimalField(max_digits=9,decimal_places=2,default=0)
     level=models.IntegerField(default=0)
     picture = models.CharField(max_length=50, blank=True)
+    @classmethod
+    def from_json(cls, user_object, json_object):
+        return cls(
+            user=user_object,
+            phone=json_object.get('phone'),
+            address=json_object.get('address'),
+            picture=json_object.get('picture'),
+        )
+
+
+
+
 
 class Customer(models.Model):
     user=models.ForeignKey(User,on_delete=models.CASCADE)
@@ -89,6 +100,46 @@ class Customer(models.Model):
             address=json_object.get('address'),
             picture=json_object.get('picture')
         )
+
+
+class Item(models.Model):
+    seller=models.ForeignKey(User,on_delete=models.CASCADE)
+    name=models.CharField(max_length=250,blank=False)
+    description=models.CharField(max_length=1000,blank=False)
+    price=models.DecimalField(max_length=8,max_digits=8,decimal_places=2,blank=False)
+    images=models.CharField(max_length=200,blank=False)
+    category=models.CharField(max_length=250,default="")
+
+
+    @classmethod
+    def from_json(cls,seller_obj,json_obj):
+        return cls(
+            seller=seller_obj,
+            name=json_obj.get('name'),
+            description=json_obj.get('description'),
+            price=json_obj.get('price'),
+            images=json_obj.get('images'),
+            category=json_obj.get('category')
+        )
+
+
+
+
+class Payment(models.Model):
+    order=models.ForeignKey('Order',on_delete=models.CASCADE)
+    total=models.DecimalField(max_length=10,max_digits=10,decimal_places=2,blank=False)
+    payment_status=models.BooleanField(blank=False)
+
+class Order(models.Model):
+    user=models.ForeignKey(User,on_delete=models.CASCADE)
+    item=models.ForeignKey(Item,on_delete=models.CASCADE)
+    quantity=models.IntegerField(default=1)
+    note=models.CharField(max_length=300,blank=True)
+
+
+
+
+
 
 
 

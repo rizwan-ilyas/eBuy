@@ -4,18 +4,24 @@ import {BrowserRouter as Router,Routes,Route} from 'react-router-dom'
 
 import Login from "./components/Login"
 import SignUp from "./components/SignUp"
-import AddCustomer from "./components/AddCustomer"
+import AddCustomer from './components/AddCustomer';
+import AddProduct from "./components/AddProduct"
 
 function App() {
+
+
+
   return (
     <div className="App">
+
 <Router>
       <Routes>
-
-        <Route path='/signin' element={<Login/>} />
+        <Route path='/signin' element={<Login/>}/>
         <Route path='/signup' element={<SignUp/>}/>
-        <Route path='/addcustomer' element={<AddCustomer/>}/>
-
+        <Route path='/addcustomer' element={<AddCustomer is_seller={"false"}/>}/>
+        <Route path='/addseller' element={<AddCustomer is_seller={"true"}/>}/>
+        <Route path='/addproduct' element={<AddProduct/>}/>
+        
       </Routes>
       </Router>
     </div>

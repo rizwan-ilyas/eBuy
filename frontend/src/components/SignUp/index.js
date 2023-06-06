@@ -45,9 +45,15 @@ const csrftoken=getCookie('csrftoken')
         setFormData({...formData,[e.target.name]:e.target.value})
     }
 
+
+    const validateData=()=>{
+        if(formData.is_seller===""){ formData.is_seller='False'}
+    }
+
     const handleSubmit=(e)=>{
 
         e.preventDefault()
+        validateData()
         console.log(formData)
         axios.defaults.xsrfHeaderName = 'X-CSRFToken'
         axios.defaults.xsrfCookieName = 'csrftoken'

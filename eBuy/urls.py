@@ -10,7 +10,9 @@ urlpatterns = [
     path('signout',views.signOut,name="Logout url"),
 
     path('addcustomer',views.addCustomer,name="add Customer data"),
-    path('addseller',views.addSeller,name="add Seller data")
+    path('addseller',views.addSeller,name="add Seller data"),
+    path('addproduct',views.addProduct,name="add product data"),
+    path('getproducts',views.getItems,name="Get all product data"),
 
 
 ]

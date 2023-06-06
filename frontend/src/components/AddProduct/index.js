@@ -1,16 +1,18 @@
-import axios from 'axios'
 import React, { useState } from 'react'
+import axios from 'axios'
 
-const Index = ({is_seller}) => {
+const Index = () => {
+
 
     const [formData, setFormData] = useState({
-        'phone': '',
-        'address': '',
+        'name': '',
+        'description': '',
+        'price': '',
+        'category': '',
         'imagefile': null,
-
     })
 
-    var posturl="http://127.0.0.1:8000/addcustomer"
+
 
     function getCookie(name) {
         // Split document.cookie by semicolons into an array.
@@ -64,12 +66,7 @@ const csrftoken=getCookie('csrftoken')
         axios.defaults.xsrfHeaderName = 'X-CSRFToken'
         axios.defaults.xsrfCookieName = 'csrftoken'
         
-        if(is_seller===true){
-            posturl="http://127.0.0.1:8000/addseller"
-        }
-
-
-        axios.post(posturl,formData,{
+        axios.post("http://127.0.0.1:8000/addproduct",formData,{
             headers:{'Content-Type':'multipart/form-data'}
         })
         .then(response=>{
@@ -80,19 +77,34 @@ const csrftoken=getCookie('csrftoken')
         })
     }
 
-    return (
-        <div>
-            <form className='form' onSubmit={handleSubmit}>
-                <input type='hidden' name='csrfmiddlewaretoken' value={csrftoken} />
-                <input type='tel' name='phone' value={formData.phone} onChange={handleInput} />
-                <textarea name='address' value={formData.address} onChange={handleInput} />
-                <input type='file' name='imagefile' accept='image/png, image/peng, image/jpg' onChange={handleInput} />
-                <button  onClick={uploadCliked}>Upload</button>
+
+
+  return (
+
+    <div>
+        Add Product Form
+        <form className='form' onSubmit={handleSubmit}>
+                <input type='hidden' name='csrfmiddlewaretoken' value={csrftoken} /><br/>
+                <input type='text' name='name' value={formData.name} onChange={handleInput} /><br/>
+                <textarea name='description' value={formData.description} onChange={handleInput} /><br/>
+                <input type='file' name='imagefile' accept='image/png, image/peng, image/jpg' onChange={handleInput} /><br/>
+                <input type='text' name='price' value={formData.price} onChange={handleInput} /><br/>
+                
+                <input type='text' name='category' value={formData.category} onChange={handleInput} /><br/>
+                
+                <button  onClick={uploadCliked}>Upload</button><br/>
                 <img src='...' style={{height:'20px',width:'20px'}} id='profile' alt='profile picture' />
+                <br/>
                 <input type='submit' value="Enter Fields" />
+
             </form>
-        </div>
-    )
+
+    </div>
+  )
 }
 
 export default Index
+
+
+
+
