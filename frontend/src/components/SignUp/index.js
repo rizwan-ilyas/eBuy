@@ -1,5 +1,8 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
+import Modal from 'react-modal';
+import "../Login/login.css"
+
 
 const Index = () => {
 
@@ -79,25 +82,69 @@ const csrftoken=getCookie('csrftoken')
         }
     }
 
+    const [modalOpen, setModalOpen] = useState(false);
 
+    useEffect(() => {
+      setModalOpen(true);
+    }, []);
 
 
   return (
     
-    <form className='form' onSubmit={handleSubmit}>
-        <input type='hidden' name="csrfmiddlewaretoken" value={csrftoken}/>
+    <Modal
+        isOpen={modalOpen}
+        onRequestClose={() => setModalOpen(false)}
+        contentLabel="SignUp Modal"
+       className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header border-bottom-0">
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" onClick={() => setModalOpen(false)}>&times;</span>
+            </button>
+          </div>
+          <div className="modal-body">
+            <div className="form-title text-center">
+              <h4>SignUp</h4>
+            </div>
+            <div className="alert alert-warning" id="passAlert" style={{display:'none'}}     role="alert">
+                 Your password Doesn't match.!
+             </div>
+            <div className="d-flex flex-column text-center">
+              
+              <form onSubmit={handleSubmit}>
+              <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+                <div className="form-group">
+                  <input type="name"  className="form-control" id="name1" name="name" value={formData.name} onChange={handleInput} placeholder="Your name..."/>
+                </div>
+                <div>
+                    <div className="form-group">
+                    <input type="email"  className="form-control" id="email" name="email" value={formData.email} onChange={handleInput} placeholder="Your email address..."/>
+                    </div>
+                </div>
+                <div>
+                    <div className="form-group">
+                    <input type="checkbox"  className="form-control"name="is_seller" value={formData.is_seller} onChange={handleInput} id="isSeller" />
+                    </div>
+                </div>
 
-        <input type='text' name='name' value={formData.name} onChange={handleInput}/>
-        <input type='email' name='email' value={formData.email} onChange={handleInput}/>
-        <input type='checkbox' name='is_seller' value={formData.is_seller} onChange={handleInput}/>
-        <div className="alert alert-warning" id="passAlert" style={{display:'none'}} role="alert">
-            Your password Doesn't match.!
+                
+                <div>
+                    <div className="form-group">
+                    <input type="password"  className="form-control"name="password" value={formData.passsword} onChange={handleInput} id="password" placeholder="Enter Password..."/>
+                    </div>
+                </div>
+                <div>
+                    <div className="form-group">
+                    <input type="password"  className="form-control"name="cpassword"  onChange={checkPassword} id="cpassword" placeholder="Enter Confirm Password..."/>
+                    </div>
+                </div>
+                <button type='submit' className='btn btn-info btn-block btn-round'>Register</button>
+              </form>
+              
+            </div>
+          </div>
         </div>
-        <input type='password' name='password' value={formData.password} onChange={handleInput}/>
-        <input type='password' name='cPassword' onChange={checkPassword}/>
-
-        <input type='submit' value="Register"/>
-    </form>
+      </Modal>
 
 
 
