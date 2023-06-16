@@ -14,6 +14,13 @@ import json
 from .models import *
 from .mySerializers import ItemSerializer
 
+#importing stripe
+import stripe
+
+
+
+
+stripe.api_key=settings.STRIPE_PRIVATE_KEY
 
 def index(request):
     print("The is Auth Status is : ",request.user.is_authenticated)
@@ -136,7 +143,22 @@ def getItems(request):
 
 
 def checkout_session(request):
-    pass
+    if request.user.is_authenticated:
+        session=stripe.checkout.Session.create(
+            customer_email=request.user.email,
+            payment_method_types=['card'],
+            line_items=[{
+                'price_data':{
+                    'currency':'usd',
+                    'product_data':{
+                        'name':"name",
+                    },
+                    'unit_amount':int()
+
+                }
+
+            }]
+        )
 
 
 def signOut(request):
