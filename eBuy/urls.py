@@ -15,4 +15,8 @@ urlpatterns = [
     path('getproducts',views.getItems,name="Get all product data"),
 
 
+
+
+    path('create-checkout-session',views.checkout_session,name="create checkout session"),
+
 ]

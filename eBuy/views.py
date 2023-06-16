@@ -135,6 +135,9 @@ def getItems(request):
 
 
 
+def checkout_session(request):
+    pass
+
 
 def signOut(request):
     logout(request)
