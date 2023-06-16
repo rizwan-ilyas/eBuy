@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import Modal from 'react-modal';
+import React, { useState} from 'react'
 
 import axios from "axios";
 import "./login.css"
 
-const Index = () => {
+const Login = () => {
 
   const [formData, setFormData] = useState({
     email: "",
@@ -40,25 +39,6 @@ const Index = () => {
   }
 
 
-
-
-  useEffect(() => {
-
-  })
-
-  const getDataFrom = () => {
-    axios.get('http://127.0.0.1:8000/signin')
-      .then(response => {
-        console.log("Response is ", response)
-      })
-      .catch(error => {
-        console.log("Error is ", error)
-      })
-  }
-
-
-
-
   const submitHandle = (e) => {
 
     e.preventDefault()
@@ -80,26 +60,14 @@ const Index = () => {
   }
 
 
-  const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    setModalOpen(true);
-  }, []);
-
 
   return (
- 
-
-    
-<Modal
-        isOpen={modalOpen}
-        onRequestClose={() => setModalOpen(false)}
-        contentLabel="Login Modal"
-       className="modal-dialog modal-dialog-centered">
+<>
+<div className="modal-dialog modal-dialog-centered">
         <div className="modal-content">
           <div className="modal-header border-bottom-0">
             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true" onClick={() => setModalOpen(false)}>&times;</span>
+              <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div className="modal-body">
@@ -124,16 +92,14 @@ const Index = () => {
             <div className="signup-section">Not a member yet? <a href="/signup" className="text-info"> Sign Up</a>.</div>
           </div>
         </div>
-      </Modal>
-  
-
-
+      </div>
+      </>
+      
       )
 
 }
 
-      export default Index
-
+      export default Login
 
 
 

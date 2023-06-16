@@ -1,6 +1,7 @@
 from django.contrib.gis.geometry import json_regex
 from django.shortcuts import render,HttpResponse, redirect
 from django.middleware import csrf
+from django.template.context_processors import request
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate,logout,login
 from  django.http import JsonResponse
@@ -18,6 +19,29 @@ from .mySerializers import ItemSerializer
 def index(request):
     print("The is Auth Status is : ",request.user.is_authenticated)
     return render(request, 'index.html')
+
+def index(request):
+    print("The is Auth Status is : ",request.user.is_authenticated)
+    return render(request, 'index.html')
+
+def contact(request):
+    print("Contact Page")
+    return render(request, 'index.html')
+
+def service(request):
+    print("Service Page")
+    return render(request, 'index.html')
+
+def whyUs(request):
+    print("Why Us Page")
+    return render(request, 'index.html')
+
+def about(request):
+    print("About Page")
+    return render(request, 'index.html')
+
+
+
 
 def signIn(request):
     if request.method == "POST":
@@ -126,6 +150,22 @@ def getItems(request):
     items=Item.objects.all()
     serializer=ItemSerializer(items, many=True)
     return JsonResponse(serializer.data,safe=False)
+
+def products(request):
+    return render(request,'index.html')
+
+
+def addToCart(request,productId):
+    if productId!=None and request.user.is_authenticated:
+        pass
+    else:
+        return redirect('signin')
+
+def placeOrder(request):
+    if request.user.is_authenticated:
+        pass
+    else:
+        return redirect('signin')
 
 
 
