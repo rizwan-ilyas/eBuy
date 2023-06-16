@@ -1,0 +1,64 @@
+.top-header
+{
+    margin: 0;
+    padding: 0;
+    height: 72px;
+}
+
+ul {
+    list-style-type: none;
+    overflow: hidden;
+    background-color: #eae2b7;
+}
+li{
+    display: inline;
+    float :left;
+    padding: 2px;
+    margin: 10px;
+    color: #003049;
+}
+
+.liIcon
+{
+    color: #003049;
+}
+li span
+{
+    padding: 5px;
+}
+
+.loginHeader
+{
+    margin: 10px;
+    border: none;
+    padding: 5px 12px;
+    float: right;
+    background-color: #003049;
+    color: #eae2b7;
+    font-size: 16px;
+}
+
+.loginHeader:hover
+{
+    color:#003049;
+    background-color: #eae2b7;
+    transition-duration: 0.6s;
+}
+
+.sellerHeader
+{
+    margin: 10px;
+    border: none;
+    padding: 5px 12px;
+    float: right;
+    background-color: #eae2b7;
+    color: #003049;
+    font-size: 16px;
+}
+
+.sellerHeader:hover
+{
+    color:#eae2b7;
+    background-color: #003049;
+    transition-duration: 0.6s;
+}
