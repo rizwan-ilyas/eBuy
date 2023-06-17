@@ -1,0 +1,27 @@
+.nav-container
+{
+    align-items: center;
+    background-color: #eae2b7;
+    height: 50px;
+    font-family:Verdana;
+}
+
+.nav-row {
+    list-style-type: none;
+    overflow: hidden;
+    background-color: transparent;
+}
+.nav-row-list{
+    display: inline;
+    padding-right: 12px;
+    text-align: center;
+    font-weight: 450;
+    margin: 10px;
+    color: #003049;
+    font-size: 15px;
+}
+
+.nav-row-list:hover
+{
+    text-decoration: underline;
+}
