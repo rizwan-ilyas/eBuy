@@ -21,10 +21,12 @@ urlpatterns = [
     path('getproducts',views.getItems,name="Get all product data"),
     path('products', views.products, name="Get all product data"),
 
-    path('addcart/<str:productId>',views.addToCart,name="to add the product in cart"),
+    path('addcart',views.addToCart,name="to add the product in cart"),
     path('order',views.placeOrder,name="to place an order"),
 
 
+
+    path('payment',views.index),
     path('create-checkout-session',views.checkout_session,name="create checkout session"),
     path('sucess',views.sc,name="sucess"),
     path('failed',views.fail,name="fail"),

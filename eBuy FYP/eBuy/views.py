@@ -13,7 +13,13 @@ import json
 # Create your views here.
 
 from .models import *
-from .mySerializers import ItemSerializer
+from .mySerializers import *
+
+#stripe
+import stripe
+
+
+stripe.api_key=settings.STRIPE_PRIVATE_KEY
 
 
 def index(request):
@@ -154,12 +160,30 @@ def getItems(request):
 def products(request):
     return render(request,'index.html')
 
+@csrf_exempt
+def addToCart(request):
+    if request.user.is_authenticated and request.method=="POST":
+        data = json.loads(request.body)
+        productID = data['productID']
 
-def addToCart(request,productId):
-    if productId!=None and request.user.is_authenticated:
-        pass
+        try:
+            cart=Cart(user_id=request.user.id,item_id=productID)
+            cart.save()
+            return HttpResponse("added to cart")
+        except Exception as e:
+            print(e)
+            return HttpResponse("Something went wrong while adding product to cart")
+
     else:
         return redirect('signin')
+
+def getCart(request):
+    cart=Cart.objects.all()
+    serializer=CartSerializer(cart, many=True)
+    return JsonResponse(serializer.data,safe=False)
+
+
+
 
 def placeOrder(request):
     if request.user.is_authenticated:
@@ -183,15 +207,16 @@ def checkout_session(request):
                 'price_data':{
                     'currency':'usd',
                     'product_data':{
-                        'name':"name",
+                        'name':"product name",
                     },
-                    'unit_amount':int()
+                    'unit_amount':100
 
-                }
+                },'quantity': 1,
 
             }],
-            made="http://127.0.0.1:8000/sucess",
-            success_url="http://127.0.0.1:8000/failed"
+            mode='payment',
+            success_url="http://127.0.0.1:8000/sucess",
+            cancel="http://127.0.0.1:8000/failed"
         )
         return JsonResponse({'sID':session.id})
 

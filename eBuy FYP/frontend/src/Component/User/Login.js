@@ -1,9 +1,10 @@
-import React, { useState} from 'react'
+import React, { useState, useEffect } from 'react'
 
+import Popup from "reactjs-popup";
 import axios from "axios";
 import "./login.css"
 
-const Login = () => {
+const Login = ({closeEvent}) => {
 
   const [formData, setFormData] = useState({
     email: "",
@@ -39,6 +40,20 @@ const Login = () => {
   }
 
 
+
+  const getDataFrom = () => {
+    axios.get('http://127.0.0.1:8000/signin')
+      .then(response => {
+        console.log("Response is ", response)
+      })
+      .catch(error => {
+        console.log("Error is ", error)
+      })
+  }
+
+
+
+
   const submitHandle = (e) => {
 
     e.preventDefault()
@@ -62,44 +77,76 @@ const Login = () => {
 
 
   return (
-<>
-<div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header border-bottom-0">
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-            <div className="form-title text-center">
-              <h4>Login</h4>
-            </div>
-            <div className="d-flex flex-column text-center">
-              <form onSubmit={submitHandle}>
-              <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
-                <div className="form-group">
-                  <input type="email"  className="form-control" id="email1" name="email" value={formData.email} onChange={handleInput} placeholder="Your email address..."/>
+   <>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div class="modal-header border-bottom-0">
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-label="Close"
+                >
+                  <span aria-hidden="true" onClick={() => closeEvent()}>&times;</span>
+                </button>
+              </div>
+              <div className="modal-body">
+                <div className="form-title text-center">
+                  <h4>Login</h4>
                 </div>
-                <div className="form-group">
-                  <input type="password" value={formData.password} name="password" onChange={handleInput} className="form-control" id="password1" placeholder="Your password..."/>
+                <div className="d-flex flex-column text-center">
+                  <form onSubmit={submitHandle}>
+                  <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+                    <div className="form-group">
+                      <input
+                        type="email"
+                        className="form-control"
+                        id="email1"
+                        placeholder="Your email address..."
+                        name="email" value={formData.email} onChange={handleInput}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <input
+                        type="password"
+                        className="form-control"
+                        id="password1"
+                        placeholder="Your password..."
+                        value={formData.password} name="password" onChange={handleInput}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="btn btn-info btn-block btn-round"
+                    >
+                      Login
+                    </button>
+                  </form>
                 </div>
-                <button type="submit" className="btn btn-info btn-block btn-round">Login</button>
-              </form>
-              
+              </div>
+              <div className="modal-footer d-flex justify-content-center">
+                <div className="signup-section">
+                  Not a member yet?
+                  <a href="/signup" className="text-info">
+                    
+                    Sign Up
+                  </a>
+                  .
+                </div>
+              </div>
             </div>
           </div>
-          <div className="modal-footer d-flex justify-content-center">
-            <div className="signup-section">Not a member yet? <a href="/signup" className="text-info"> Sign Up</a>.</div>
-          </div>
-        </div>
-      </div>
-      </>
-      
-      )
+          </>
+  );
+};
 
-}
 
-      export default Login
+export default Login;
+
+
+
+
+
 
 
 

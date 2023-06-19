@@ -1,3 +1,5 @@
+from turtle import mode
+
 from django.contrib.auth import password_validation
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, User
@@ -109,6 +111,7 @@ class Item(models.Model):
     price=models.DecimalField(max_length=8,max_digits=8,decimal_places=2,blank=False)
     images=models.CharField(max_length=200,blank=False)
     category=models.CharField(max_length=250,default="")
+    quantity=models.IntegerField(max_length=15,default=0)
 
 
     @classmethod
@@ -119,7 +122,8 @@ class Item(models.Model):
             description=json_obj.get('description'),
             price=json_obj.get('price'),
             images=json_obj.get('images'),
-            category=json_obj.get('category')
+            category=json_obj.get('category'),
+            quantity=json_obj.get('quantity'),
         )
 
 
@@ -135,6 +139,13 @@ class Order(models.Model):
     item=models.ForeignKey(Item,on_delete=models.CASCADE)
     quantity=models.IntegerField(default=1)
     note=models.CharField(max_length=300,blank=True)
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity=models.IntegerField(default=1)
+
 
 
 
